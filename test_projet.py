@@ -11,6 +11,7 @@ def TABSUFF(chaine):
 #QUESTION 2 : RECHERCHE DU MOTIF 
 def search_pattern(text,pattern):    
     #Tabsuffix,_ = TABSUFF(text)
+    
     Tabsuffix = TABSUFF(text)
     indexes = []
     for i,suffix in enumerate(Tabsuffix):
