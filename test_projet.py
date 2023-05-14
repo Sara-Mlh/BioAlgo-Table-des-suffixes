@@ -25,12 +25,9 @@ def prefix_commun(word1,word2):
     l1 = len(word1)
     l2 = len(word2)
     i = 0
-    long_pref = ""
-
     while i<min(l1,l2) and word1[i]==word2[i] :
-        long_pref += word1[i]
         i+=1
-    return long_pref
+    return word1[:i]
 
 def HTR(text):
     suffixes,_ = TABSUFF(text)
@@ -55,11 +52,11 @@ mot1 = "AABBCZZZZ"
 motif = "ABBC"
 word ="banana"
 
-print("Table des suffixes: \n",TABSUFF(word))
+#print("Table des suffixes: \n",TABSUFF(word))
 
-print("Table htr : \n",HTR(word))
+#print("Table htr : \n",HTR(word))
 
-#print("longest prefix \n",prefix_commun(mot,mot1))
+print("longest prefix \n",prefix_commun(mot,mot1))
 
 #print(mot[0:5])
 
