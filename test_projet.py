@@ -115,9 +115,10 @@ mot = "AABBCZCAABBC"
 mot1 = "AABBCZZZZ"
 motif = "ABBC"
 word ="saralynasaralycha"
+pattern = "sara"
 
 print("The suffix table of the word {} is : \n {}".format(word,TABSUFF(word)))
-#print("Le motif se trouve aux indices :",search_pattern(mot,motif))
+print("The pattern {} is in the positions : {}".format(pattern,search_pattern(word,pattern)))
 # print("longest prefix :",prefix_commun(mot,mot1))
 
 print("Table htr of {} is :\n {} ".format(word,HTR(word)))
