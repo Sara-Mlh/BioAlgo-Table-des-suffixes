@@ -46,8 +46,8 @@ def HTR(text):
     return htr_table,htr_len
 
 #QUESTION 4 TS ET HTR
-    #PUS LONG FACTEUR REPETE DANS LE TEXTE
 
+#LONGEST REPEATED FACTORS 
 def longest_repeated_factors(text):
     _,htr = HTR(text)
     max_htr = max(htr)
@@ -60,6 +60,7 @@ def longest_repeated_factors(text):
             if factor not in factors:
                 factors.append(factor)
     return factors
+#FACTORS REPEATED AT LEAST 3 TIMES
 def repeated_factors3(text):
     _,htr = HTR(text)
     suffixes,_ = TABSUFF(text)
@@ -73,10 +74,18 @@ def repeated_factors3(text):
     for factor in factors :
         count = text.count(factor)
         if count >=3 and factor not in repeated_factors :
-            repeated_factors.append(factor)
-        
+            repeated_factors.append(factor)      
     return repeated_factors
-    
+#QUESTION 5 INVERSE SUFFIX TABLE   
+def Inverse_TS(text):
+    suffixes,_ = TABSUFF(text)
+    inverse = [0] * len(suffixes)
+    for i in range(len(suffixes)):
+        index = suffixes[i]
+        inverse[index] = i
+    return inverse
+
+
 
 
 #********************* TEST *************************
@@ -84,7 +93,7 @@ def repeated_factors3(text):
 mot = "AABBCZCAABBC"
 mot1 = "AABBCZZZZ"
 motif = "ABBC"
-word ="alysarrachalrrchalynarr"
+word ="banana"
 
 print("The suffix table of the word {} is : \n {}".format(word,TABSUFF(word)))
 #print("Le motif se trouve aux indices :",search_pattern(mot,motif))
@@ -95,6 +104,8 @@ print("Table htr of {} is :\n {} ".format(word,HTR(word)))
 print("Longest factors of {} are: {}".format(word,longest_repeated_factors(word)))
 
 print("The factors that are repeated at least 3 times in the word {} are: {}".format(word,repeated_factors3(word)))
+
+print("The inverse of suffix table of the word {} is : \n {}".format(word,Inverse_TS(word)))
 #print(mot[0:5])
 
 #print('les indices sont :',search_pattern(mot,motif))
