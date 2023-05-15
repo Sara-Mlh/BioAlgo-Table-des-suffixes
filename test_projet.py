@@ -85,7 +85,7 @@ def Inverse_TS(text):
         inverse[index] = i
     return inverse
 
-#QUESTION 6 SHORTEST FACTOR
+#QUESTION 6 SHORTEST UNIQUE FACTOR
 def Shortest_unique_factors(text):
     _,htr = HTR(text)
     suffixes,_ = TABSUFF(text)
@@ -102,9 +102,11 @@ def Shortest_unique_factors(text):
             else :
                 if factor not in factors :
                     factors.append(factor)'''
-    shortest = min(factors,key=len)
-    return shortest        
-
+    min_length = len(min(factors, key=len))
+    shortest = [factor for factor in factors if len(factor) == min_length]
+    return shortest 
+       
+#QUESTION 6 SHORTEST FACTOR
 
 
 #********************* TEST *************************
@@ -112,7 +114,7 @@ def Shortest_unique_factors(text):
 mot = "AABBCZCAABBC"
 mot1 = "AABBCZZZZ"
 motif = "ABBC"
-word ="saralynasaralychak"
+word ="saralynasaralycha"
 
 print("The suffix table of the word {} is : \n {}".format(word,TABSUFF(word)))
 #print("Le motif se trouve aux indices :",search_pattern(mot,motif))
@@ -126,5 +128,5 @@ print("The factors that are repeated at least 3 times in the word {} are: {}".fo
 
 print("The inverse of suffix table of the word {} is : \n {}".format(word,Inverse_TS(word)))
 #print(mot[0:5])
-print("shirtest",Shortest_unique_factors(word))
+print("The shortest unique factors of the word {} are : {}".format(word,Shortest_unique_factors(word)))
 #print('les indices sont :',search_pattern(mot,motif))
