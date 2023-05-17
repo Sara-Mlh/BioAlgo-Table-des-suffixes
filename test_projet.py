@@ -1,4 +1,3 @@
-from collections import Counter
 import re
 
 #QUESTION 1 : TABLE DE SUFFIXES
@@ -16,7 +15,7 @@ def TABSUFF(chaine):
 def search_pattern(text,pattern):    
     _,Tabsuffix = TABSUFF(text)  
     indexes = []
-    for i,suffix in enumerate(Tabsuffix):
+    for suffix in enumerate(Tabsuffix):
         if pattern == suffix[:len(pattern)]:
             index = len(text) - len(suffix)
             indexes.append(index)
@@ -32,7 +31,7 @@ def prefix_commun(word1,word2):
     while i<min(l1,l2) and word1[i]==word2[i] :
         long += word1[i]
         i+=1
-    return long  #word1[:i]
+    return long  
 
 def HTR(text):
     _,suffixes = TABSUFF(text)
@@ -93,8 +92,8 @@ def Shortest_unique_factors(text):
     factors = []
     for i in range(1,len(htr)):
         factor = text[suffixes[i]:suffixes[i] + htr[i]]
-        if htr[i]> 0 and len(re.findall(f'(?={factor})', text)) == 1 : 
-            if factors is None :
+        if htr[i]> 0 and text.count(factor) == 1 : 
+            if not factors :
                factors.append(factor)
             else :
                 if factor not in factors :
@@ -173,7 +172,7 @@ print("The factors that are repeated at least 3 times in the word {} are: {}".fo
 
 print("The inverse of suffix table of the word {} is : \n {}".format(word,Inverse_TS(word)))
 #print(mot[0:5])
-#print("The shortest unique factors of the word {} are : {}".format(word,Shortest_unique_factors(word)))
-#print('les indices sont :',search_pattern(mot,motif))
+print("The shortest unique factors of the word {} are : {}".format(word,Shortest_unique_factors(word)))
+print('les indices sont :',search_pattern(mot,motif))
 print("The super maximales of the word {} are : {}".format(word,find_supermaximal_repetitions(word)))
 print("The longest commun factor words {}  and {} are : {}".format(word,pattern,Longest_common_factor(word,pattern)))
