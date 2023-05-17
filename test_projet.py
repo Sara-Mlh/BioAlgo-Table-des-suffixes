@@ -1,4 +1,5 @@
 from collections import Counter
+import re
 
 #QUESTION 1 : TABLE DE SUFFIXES
 def TABSUFF(chaine):
@@ -91,30 +92,73 @@ def Shortest_unique_factors(text):
     suffixes,_ = TABSUFF(text)
     factors = []
     for i in range(1,len(htr)):
-        if htr[i] == 0 :
-            factor = text[suffixes[i]:]
-            if factor not in factors :
-                factors.append(factor)
-        '''if htr[i]>0 : 
-            factor = text[suffixes[i]:suffixes[i] + htr[i]]
+        factor = text[suffixes[i]:suffixes[i] + htr[i]]
+        if htr[i]> 0 and len(re.findall(f'(?={factor})', text)) == 1 : 
             if factors is None :
                factors.append(factor)
             else :
                 if factor not in factors :
-                    factors.append(factor)'''
+                    factors.append(factor)
     min_length = len(min(factors, key=len))
     shortest = [factor for factor in factors if len(factor) == min_length]
-    return shortest 
-       
-#QUESTION 6 SHORTEST FACTOR
+    return shortest
+#QUESTION 7 SUPERMAXIMAL FACTOR
+def find_supermaximal_repetitions(text):
+    _, lcp = HTR(text)  # Fonction pour construire les tables LCP et suffixes
+    suffixes,_=TABSUFF(text)
+    n = len(text)
+    repetitions = []
+    for i in range(1, n):
+        if i < len(lcp):  # Vérifier si l'indice est valide
+            lcp_length = lcp[i]  # Longueur du préfixe commun avec le suffixe précédent
+            suffix_i = suffixes[i]  # Indice du suffixe courant
+            factor = text[suffix_i:suffix_i + lcp_length]  # Facteur correspondant au préfixe commun
+            repetition_count = text.count(factor)
+            if repetition_count > 1:
+                is_supermaximal = True
+                for j in range(1, len(factor) + 1):
+                    if text.count(factor[:j]) > repetition_count:
+                        is_supermaximal = False
+                        break
+                if is_supermaximal:
+                    repetitions.append(factor)
+    return repetitions
 
+#QUESTION 8 LONGEST COMMUN FACTOR BETWEEN TWO WORDS
+def Longest_common_factor(T1, T2):
+    # Concatenate the texts with a unique separator
+    concat_text = T1 + '#' + T2
+
+    # Construct the suffix table for the concatenated text
+    suffixes, _ = TABSUFF(concat_text)
+
+    # Calculate the LCP table for the concatenated text
+    _,lcp = HTR(concat_text)
+
+    max_lcp = 0  # Maximum LCP value
+    common_suffix_index = -1  # Index of the common suffix in the concatenated text
+
+    # Find the maximum LCP value between suffixes from different texts
+    for i in range(1, len(lcp)):
+        if (suffixes[i] < len(T1) and suffixes[i - 1] > len(T1)) or (suffixes[i] > len(T1) and suffixes[i - 1] < len(T1)):
+            if lcp[i] > max_lcp:
+                max_lcp = lcp[i]
+                common_suffix_index = i
+
+    if common_suffix_index == -1:
+        return None  # No common factor found
+
+    # Extract the longest common factor from the concatenated text
+    longest_common_factor = concat_text[suffixes[common_suffix_index]: suffixes[common_suffix_index] + max_lcp]
+
+    return longest_common_factor
 
 #********************* TEST *************************
       #0123456789
 mot = "AABBCZCAABBC"
 mot1 = "AABBCZZZZ"
 motif = "ABBC"
-word ="saralynasaralycha"
+word ="saralynalynasara"
 pattern = "sara"
 
 print("The suffix table of the word {} is : \n {}".format(word,TABSUFF(word)))
@@ -129,5 +173,7 @@ print("The factors that are repeated at least 3 times in the word {} are: {}".fo
 
 print("The inverse of suffix table of the word {} is : \n {}".format(word,Inverse_TS(word)))
 #print(mot[0:5])
-print("The shortest unique factors of the word {} are : {}".format(word,Shortest_unique_factors(word)))
+#print("The shortest unique factors of the word {} are : {}".format(word,Shortest_unique_factors(word)))
 #print('les indices sont :',search_pattern(mot,motif))
+print("The super maximales of the word {} are : {}".format(word,find_supermaximal_repetitions(word)))
+print("The longest commun factor words {}  and {} are : {}".format(word,pattern,Longest_common_factor(word,pattern)))
