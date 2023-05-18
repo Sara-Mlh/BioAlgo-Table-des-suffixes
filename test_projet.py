@@ -1,5 +1,7 @@
-import re
-
+import time
+import random
+import string
+import matplotlib.pyplot as plt
 #QUESTION 1 : TABLE DE SUFFIXES
 def TABSUFF(chaine):
     indexes=[]
@@ -98,9 +100,12 @@ def Shortest_unique_factors(text):
             else :
                 if factor not in factors :
                     factors.append(factor)
-    min_length = len(min(factors, key=len))
-    shortest = [factor for factor in factors if len(factor) == min_length]
-    return shortest
+    if factors :
+      min_length = len(min(factors, key=len))
+      shortest = [factor for factor in factors if len(factor) == min_length]
+      return shortest
+    else :
+        return []
 #QUESTION 7 SUPERMAXIMAL FACTOR
 def find_supermaximal_repetitions(text):
     _, lcp = HTR(text)  # Fonction pour construire les tables LCP et suffixes
@@ -176,3 +181,77 @@ print("The shortest unique factors of the word {} are : {}".format(word,Shortest
 print('les indices sont :',search_pattern(mot,motif))
 print("The super maximales of the word {} are : {}".format(word,find_supermaximal_repetitions(word)))
 print("The longest commun factor words {}  and {} are : {}".format(word,pattern,Longest_common_factor(word,pattern)))
+
+#Test de temps d execution
+#Fonction qui genere un text d une taille donnée
+
+def generate_text(size):
+    return ''.join(random.choices(string.ascii_lowercase, k=size))
+
+#Fonction qui calcule le temps d'éxecution
+def measure_execution_time(func, text):
+    start_time = time.time()
+    result = func(text)
+    end_time = time.time()
+    execution_time = end_time - start_time
+    return execution_time
+
+text_sizes = [100, 200, 600, 1000, 2000, 5000]  # Tailles de texte variables à tester
+execution_times_func1 = []
+execution_times_func2 = []
+execution_times_func3 = []
+execution_times_func4 = []
+execution_times_func5 = []
+execution_times_func6 = []
+execution_times_func7 = []
+
+for size in text_sizes:
+    # Générer le texte de taille 'size'
+    text = generate_text(size)  # Remplacez cette fonction par celle qui génère vos textes
+
+    # Mesurer le temps d'exécution pour chaque fonction
+    time_func1 = measure_execution_time(TABSUFF, text)
+    time_func2 = measure_execution_time(HTR, text)
+    time_func3 = measure_execution_time(longest_repeated_factors, text)
+    time_func4 = measure_execution_time(repeated_factors3, text)
+    time_func5 = measure_execution_time(Inverse_TS, text)
+    time_func6 = measure_execution_time(Shortest_unique_factors, text)
+    time_func7 = measure_execution_time(find_supermaximal_repetitions, text)
+    #time_func8= measure_execution_time(Longest_common_factor, text)
+    # ...
+    execution_times_func1.append(time_func1)
+    execution_times_func2.append(time_func2)
+    execution_times_func3.append(time_func3)
+    execution_times_func4.append(time_func4)
+    execution_times_func5.append(time_func5)
+    execution_times_func6.append(time_func6)
+    execution_times_func7.append(time_func7)
+
+
+    # Afficher les temps d'exécution
+    print(f"Taille du texte : {size}")
+    print(f"Temps d'exécution de fonction1 : {time_func1} secondes")
+    print(f"Temps d'exécution de fonction2 : {time_func2} secondes")
+    print(f"Temps d'exécution de fonction3 : {time_func3} secondes")
+    print(f"Temps d'exécution de fonction4 : {time_func4} secondes")
+    print(f"Temps d'exécution de fonction5 : {time_func5} secondes")
+    print(f"Temps d'exécution de fonction6 : {time_func6} secondes")
+    print(f"Temps d'exécution de fonction7 : {time_func7} secondes")
+
+
+#Le plot de comparaison
+
+plt.plot(text_sizes, execution_times_func1, label='Table suffixes TS')
+plt.plot(text_sizes, execution_times_func2, label='Table HTR')
+plt.plot(text_sizes, execution_times_func3, label='PlusLongsFacteursRépetes')
+plt.plot(text_sizes, execution_times_func4, label='Repeated_Factors3')
+plt.plot(text_sizes, execution_times_func5, label='Inverse TS')
+plt.plot(text_sizes, execution_times_func6, label='Courts Facteurs uniques')
+plt.plot(text_sizes, execution_times_func7, label='Repetitions Supermximales')
+
+plt.xlabel('Taille du texte')
+plt.ylabel('Temps d\'exécution (secondes)')
+plt.title('Comparaison des temps d\'exécution')
+plt.legend()
+
+plt.show()
